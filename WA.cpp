@@ -1,5 +1,5 @@
 /***********************************************************
-  Member  : Student 1 and Student 2
+  Member  : Bemnet Merkebu
   Synopsis: read from city.name and flight.txt
             store the graph in a adjacency matrix
 ***********************************************************/
@@ -311,7 +311,6 @@ void routeSearch_2(Graph graph, int city_A, int city_B, int city_C, int city_D) 
         }
 
         //print the path
-        cout << "Route: ";
         for (int i = 0; i < path.size(); i++) {
             if (i != path.size() - 1) {
                 cout << "city" << path[i] << " to ";
@@ -320,7 +319,7 @@ void routeSearch_2(Graph graph, int city_A, int city_B, int city_C, int city_D) 
             }
         }
         cout << endl;
-        cout << "Total connections: " << path.size() - 1 << endl;
+        cout << "Total connection: " << path.size() - 1 << endl;
     } else {
         cout << "No such route." << endl;
     }
@@ -336,8 +335,22 @@ void routeSearch_3(Graph graph, int city_A, int city_B, int city_C) {
     
     // Calculate shortest paths from A, B, and C to all other cities
     Dijkstra(graph, city_A, d_A, p_A);
+    if (d_A[city_B] == INT_MAX || d_A[city_C] == INT_MAX) {
+        cout << "No such a city."<< endl;
+        return;
+    }
+    
     Dijkstra(graph, city_B, d_B, p_B);
+    if (d_B[city_A] == INT_MAX || d_B[city_C] == INT_MAX) {
+        cout << "No such a city." << endl;
+        return;
+    }
+    
     Dijkstra(graph, city_C, d_C, p_C);
+    if (d_C[city_A] == INT_MAX || d_C[city_B] == INT_MAX) {
+        cout << "No such a city."<< endl;
+        return;
+    }
     
     // Find the meeting city that minimizes the total number of connections among the three friends
     int min_connections = INT_MAX;
@@ -354,73 +367,84 @@ void routeSearch_3(Graph graph, int city_A, int city_B, int city_C) {
     }
     
     // Print results
-    if (meeting_city == -1) {
+    if (meeting_city == -1 ) {
         cout << "No such city exists." << endl;
     } else {
-        cout << "Best meeting city: city " << meeting_city << endl;
+        cout << "You three should meet at city: " << meeting_city << endl;
 		
         // Print routes for each friend to the meeting city
         vector<int> path_A, path_B, path_C;
 		
         int cur_city = meeting_city;
 		
-		
-        
         // Get path for friend A
         while (cur_city != city_A && cur_city != -1) {
-			cout<<cur_city<<endl;
             path_A.insert(path_A.begin(), cur_city);
-            Dijkstra(graph, cur_city, d_A, p_A);
             cur_city = p_A[cur_city];
         }
-		path_A.insert(path_A.begin(), city_A);
-		
-        
+        if (cur_city == -1) {
+            cout << "No such city." << endl;
+        }
+        else {
+            path_A.insert(path_A.begin(), city_A);
+            cout << "Route for the first person: ";
+            for (int i = 0; i < path_A.size(); i++) {
+                if (i > 0) {
+                    cout << " to ";
+                }
+                cout << "city" << path_A[i];
+            }
+            cout << endl;
+            //print the total number of connections
+            cout << "Total connections: " << path_A.size() -1<< endl;
+        }
+
         cur_city = meeting_city;
+		
         // Get path for friend B
         while (cur_city != city_B && cur_city != -1) {
             path_B.insert(path_B.begin(), cur_city);
-            Dijkstra(graph, cur_city, d_B, p_B);
             cur_city = p_B[cur_city];
         }
-		path_B.insert(path_B.begin(), city_B);
+        if (cur_city == -1) {
+            cout << "No such city exists." << endl;
+        }
+        else {
+            path_B.insert(path_B.begin(), city_B);
+            cout << "Route for the second person: ";
+            for (int i = 0; i < path_B.size(); i++) {
+                if (i > 0) {
+                    cout << " to ";
+                }
+                cout << "city" << path_B[i];
+            }
+            cout << endl;
+            //print the total number of connections
+            cout << "Total connections: " << path_B.size() -1<< endl;
+        }
         
         cur_city = meeting_city;
+		
         // Get path for friend C
         while (cur_city != city_C && cur_city != -1) {
             path_C.insert(path_C.begin(), cur_city);
-            Dijkstra(graph, cur_city, d_C, p_C);
             cur_city = p_C[cur_city];
         }
-		path_C.insert(path_C.begin(), city_C);
-        
-        cout << "Route for friend A: ";
-        for (int i = 0; i < path_A.size(); i++) {
-            if (i > 0) {
-                cout <<" to ";
-            }
-            cout << "city" << path_A[i];
+        if (cur_city == -1) {
+            cout << "No such city exists." << endl;
         }
-        cout << endl;
-        
-        cout << "Route for friend B: ";
-        for (int i = 0; i < path_B.size(); i++) {
-            if (i > 0) {
-                cout <<  " to ";
+        else {
+            path_C.insert(path_C.begin(), city_C);
+            cout << "Route for the third person: ";
+            for (int i = 0; i < path_C.size(); i++) {
+                if (i > 0) {
+                    cout << " to ";
+                }
+                cout << "city" << path_C[i];
             }
-            cout << "city" << path_B[i];
+            cout << endl;
+            //print the total number of connections
+            cout << "Total connections: " << path_C.size() -1<< endl;
         }
-        cout << endl;
-        
-        cout << "Route for friend C: ";
-        for (int i = 0; i < path_C.size(); i++) {
-            if (i > 0) {
-                cout << " to ";
-            }
-            cout << "city" << path_C[i];
-        }
-        cout << endl;
-        
-        cout << "Total connections: " << min_connections << endl;
     }
 }
