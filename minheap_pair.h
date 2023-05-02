@@ -5,7 +5,7 @@ using namespace std;
 
 class MinPriorityQueue {
 private:
-    vector<pair<int, int>> heap; // heap storing pairs of (key, value)
+    vector<pair<int, int> > heap; // heap storing pairs of (key, value)
     int size; // size of the heap
 
     int find(int value) {
